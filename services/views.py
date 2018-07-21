@@ -9,12 +9,14 @@ from services.models import (
     Word,
     State,
     )
+
 from services.serializers import (
     SentenceSerializer,
     TextSerializer,
     WordSerializer,
     StateSerializer,
     )
+
 from utils.paginations import StandardResultPagination
 
 # sentence view GET POST
@@ -28,17 +30,17 @@ class SentenceAPIView(generics.ListCreateAPIView):
     def get_queryset(self, *args, **kwargs):
         queryset = Sentence.objects.all().order_by('id')
         owner_by = self.request.GET.get('owner')
-        userid_by = self.request.GET.get('userid')
+        username_by = self.request.GET.get('username')
         source_by = self.request.GET.get('source')
         role_by = self.request.GET.get('role')
         detail_role_by = self.request.GET.get('detail_role')
 
         if owner_by:
             queryset = queryset.filter(owner=owner_by)
-        if userid_by:
-            queryset = queryset.filter(userid=userid_by)
-        if owner_by and userid_by:
-            queryset = queryset.filter(owner=owner_by).filter(userid=userid_by)
+        if username_by:
+            queryset = queryset.filter(username=username_by)
+        if owner_by and username_by:
+            queryset = queryset.filter(owner=owner_by).filter(username=username_by)
         if source_by:
             queryset = queryset.filter(source=source_by)
         if role_by:
@@ -54,7 +56,6 @@ class SentenceDetailsAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SentenceSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-
 #Text Views GET POST
 class TextAPIView(generics.ListCreateAPIView):
     queryset = Text.objects.all()
@@ -65,7 +66,7 @@ class TextAPIView(generics.ListCreateAPIView):
     def get_queryset(self, *args, **kwargs):
         queryset = Text.objects.all().order_by('id')
         owner_by = self.request.GET.get('owner')
-        userid_by = self.request.GET.get('userid')
+        username_by = self.request.GET.get('username')
         type_by = self.request.GET.get('type')
         source_by = self.request.GET.get('source')
         cartegory_by = self.request.GET.get('cartegory')
@@ -73,10 +74,10 @@ class TextAPIView(generics.ListCreateAPIView):
 
         if owner_by:
             queryset = queryset.filter(owner=owner_by)
-        if userid_by:
-            queryset = queryset.filter(userid=userid_by)
-        if owner_by and userid_by:
-            queryset = queryset.filter(owner=owner_by).filter(userid=userid_by)
+        if username_by:
+            queryset = queryset.filter(username=username_by)
+        if owner_by and username_by:
+            queryset = queryset.filter(owner=owner_by).filter(username=username_by)
         if type_by:
             queryset = queryset.filter(type=type_by)
         if source_by:
@@ -101,17 +102,17 @@ class WordAPIView(generics.ListCreateAPIView):
     def get_queryset(self, *args, **kwargs):
         queryset = Word.objects.all().order_by('id')
         owner_by = self.request.GET.get('owner')
-        userid_by = self.request.GET.get('userid')
+        username_by = self.request.GET.get('username')
         source_by = self.request.GET.get('source')
         role_by = self.request.GET.get('role')
         detail_role_by = self.request.GET.get('detail_role')
 
         if owner_by:
             queryset = queryset.filter(owner=owner_by)
-        if userid_by:
-            queryset = queryset.filter(userid=userid_by)
-        if owner_by and userid_by:
-            queryset = queryset.filter(owner=owner_by).filter(userid=userid_by)
+        if username_by:
+            queryset = queryset.filter(username=username_by)
+        if owner_by and username_by:
+            queryset = queryset.filter(owner=owner_by).filter(username=username_by)
         if source_by:
             queryset = queryset.filter(source=source_by)
         if role_by:
@@ -126,7 +127,6 @@ class WordDetailsAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Word.objects.all()
     serializer_class = WordSerializer
 
-
 # State view GET POST
 class StateAPIView(generics.ListCreateAPIView):
     queryset = State.objects.all().order_by('-id')
@@ -134,8 +134,55 @@ class StateAPIView(generics.ListCreateAPIView):
     pagination_class = StandardResultPagination
     filter_backends = [SearchFilter, OrderingFilter]
 
-
 # State view PUT DELETE
 class StateDetailsAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = State.objects.all()
     serializer_class = StateSerializer
+
+# PPT view GET
+class UserPptView(generics.ListAPIView):
+    queryset = Text.objects.filter(type='PPT')
+    serializer_class = TextSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = Text.objects.filter(type='PPT').order_by('-id')
+        username_by = self.request.GET.get('username')
+        if username_by:
+            queryset = queryset.filter(username=username_by)
+        return queryset
+
+# MAIL view GET
+class UserMailView(generics.ListAPIView):
+    queryset = Text.objects.filter(type='MAIL')
+    serializer_class = TextSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = Text.objects.filter(type='MAIL').order_by('-id')
+        username_by = self.request.GET.get('username')
+        if username_by:
+            queryset = queryset.filter(username=username_by)
+        return queryset
+
+# MAIL view GET
+class UserSopView(generics.ListAPIView):
+    queryset = Text.objects.filter(type='SOP')
+    serializer_class = TextSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = Text.objects.filter(type='SOP').order_by('-id')
+        username_by = self.request.GET.get('username')
+        if username_by:
+            queryset = queryset.filter(username=username_by)
+        return queryset
+
+# MAIL view GET
+class UserResumeView(generics.ListAPIView):
+    queryset = Text.objects.filter(type='RESUME')
+    serializer_class = TextSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = Text.objects.filter(type='RESUME').order_by('-id')
+        username_by = self.request.GET.get('username')
+        if username_by:
+            queryset = queryset.filter(username=username_by)
+        return queryset

@@ -9,6 +9,7 @@ from services.views import (
     WordDetailsAPIView,
     StateAPIView,
     StateDetailsAPIView,
+    UserPptView,
 )
 
 urlpatterns = [
@@ -20,4 +21,7 @@ urlpatterns = [
     url(r'^word/(?P<pk>[\w.@+-]+)/$', WordDetailsAPIView.as_view(), name='word-detail'),
     url(r'^state/$', StateAPIView.as_view(), name='states'),
     url(r'^state/(?P<pk>[\w.@+-]+)/$', StateDetailsAPIView.as_view(), name='state-details'),
+
+    # User 템플릿 리스트 API
+    url(r'^ppt/$', UserPptView.as_view(), name='user-ppt'),
 ]
