@@ -32,7 +32,9 @@ class Sentence(models.Model):
     detail_role = models.CharField(max_length=100, blank=True, null=True)
     sentence = models.TextField(blank=True, null=True)
     translated = models.TextField(blank=True, null=True)
-
+    created = models.DateField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
+    
     def __str__(self):
         return "{}".format(self.owner)
 
@@ -45,6 +47,8 @@ class Text(models.Model):
     title = models.CharField(max_length=100, blank=True, null=True)
     template = models.TextField(blank=True, null=True)
     translated = models.TextField(blank=True, null=True)
+    created = models.DateField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
 
     def __str__(self):
         return "{}".format(self.owner)
@@ -57,6 +61,8 @@ class Word(models.Model):
     role = models.CharField(max_length=100, blank=True, null=True)
     word = models.TextField(blank=True, null=True)
     translated = models.TextField(blank=True, null=True)
+    created = models.DateField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
 
     def __str__(self):
         return "{}".format(self.owner)
