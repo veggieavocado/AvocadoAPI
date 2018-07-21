@@ -42,7 +42,7 @@ class WordAPITestCase(TestCase):
         # create sentece data
         self.word = {
                     'owner':'VA',
-                    'userid':"1000",
+                    'username':'',
                     'source':'TED',
                     'role':'프레젠테이션',
                     'word':'speak',
@@ -106,12 +106,13 @@ class WordAPITestCase(TestCase):
         data = response.json()['results'][0]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data['owner'], 'VA')
-        self.assertEqual(data['userid'], 1000)
+        self.assertEqual(data['username'], '')
         self.assertEqual(data['source'], 'TED')
 
 
         # put
-        self.word['owner'] = 'U'
+        self.word['owner'] = 'USER'
+        self.word['username'] = 'lee'
         # authorized case
         response = self.client.put(
             URL['word_put_delete'],
@@ -129,8 +130,8 @@ class WordAPITestCase(TestCase):
         )
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data['owner'], 'U')
-        self.assertEqual(data['userid'], 1000)
+        self.assertEqual(data['owner'], 'USER')
+        self.assertEqual(data['username'], 'lee')
         self.assertEqual(data['source'], 'TED')
 
         #delete

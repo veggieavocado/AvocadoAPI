@@ -6,7 +6,7 @@ class SentenceTestCase(TestCase):
     # maek user data
     def setUp(self):
         sentence, sentence_created = Sentence.objects.get_or_create(owner='VA',
-                                                                    userid="1000",
+                                                                    username='',
                                                                     source='TED',
                                                                     role='프레젠테이션',
                                                                     detail_role='스티브잡스 연설',
@@ -20,14 +20,14 @@ class SentenceTestCase(TestCase):
     def test_user_is_created(self):
         self.sentence_test = Sentence.objects.all().first()
         owner = self.sentence_test.owner
-        userid = self.sentence_test.userid
+        username = self.sentence_test.username
         source = self.sentence_test.source
         role = self.sentence_test.role
         detail_role = self.sentence_test.detail_role
         sentence = self.sentence_test.sentence
         translated = self.sentence_test. translated
         self.assertEqual(owner, 'VA')
-        self.assertEqual(userid, 1000)
+        self.assertEqual(username, '')
         self.assertEqual(source, 'TED')
         self.assertEqual(role, '프레젠테이션')
         self.assertEqual(detail_role, '스티브잡스 연설')

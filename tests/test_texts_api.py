@@ -48,9 +48,9 @@ class TextAPITestCase(TestCase):
                          She refused to sign the final adoption papers. She only relented a few months later when my parents promised that I would someday go to college."
         # create sentece data
         self.text = {
-                        'owner':'VA',
-                        'userid':1000,
-                        'type':'e-mail',
+                        'owner':'USER',
+                        'username':'lee',
+                        'type':'PPT',
                         'source':'book',
                         'category':'business',
                         'title':'스티브잡스 연설',
@@ -114,12 +114,13 @@ class TextAPITestCase(TestCase):
         )
         data = response.json()['results'][0]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data['owner'], 'VA')
-        self.assertEqual(data['userid'], 1000)
+        self.assertEqual(data['owner'], 'USER')
+        self.assertEqual(data['username'], 'lee')
         self.assertEqual(data['source'], 'book')
 
         # put
-        self.text['owner'] = 'U'
+        self.text['owner'] = 'VA'
+        self.text['username'] = ''
         # authorized case
         response = self.client.put(
             URL['text_put_delete'],
@@ -136,8 +137,8 @@ class TextAPITestCase(TestCase):
             format='json',
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json()['owner'], 'U')
-        self.assertEqual(response.json()['userid'], 1000)
+        self.assertEqual(response.json()['owner'], 'VA')
+        self.assertEqual(response.json()['username'], '')
         self.assertEqual(response.json()['source'], 'book')
 
         #delete

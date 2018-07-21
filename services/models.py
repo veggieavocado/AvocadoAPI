@@ -1,4 +1,16 @@
 from django.db import models
+OWNER = {
+    ('VA', '베지아보카도'),
+    ('USER', '사용자'),
+}
+
+TEXT_TYPES = {
+    ('PPT', '프레젠테이션'),
+    ('MAIL', '이메일'),
+    ('SOP', '자기소개서'),
+    ('RESUME', '이력서'),
+}
+
 
 TYPES = (
     ('TEXT', '템플릿'),
@@ -13,8 +25,8 @@ STATUS_TYPES = (
 
 
 class Sentence(models.Model):
-    owner = models.CharField(max_length=4)
-    userid = models.IntegerField(blank=True, null=True)
+    owner = models.CharField(max_length=4, choices=OWNER)
+    username = models.CharField(max_length=100, blank=True, null=True)
     source = models.CharField(max_length=100, blank=True, null=True)
     role = models.CharField(max_length=100, blank=True, null=True)
     detail_role = models.CharField(max_length=100, blank=True, null=True)
@@ -25,9 +37,9 @@ class Sentence(models.Model):
         return "{}".format(self.owner)
 
 class Text(models.Model):
-    owner = models.CharField(max_length=4)
-    userid = models.IntegerField(blank=True, null=True)
-    type = models.CharField(max_length=10, blank=True, null=True)
+    owner = models.CharField(max_length=4, choices=OWNER)
+    username = models.CharField(max_length=100, blank=True, null=True)
+    type = models.CharField(max_length=10, choices=TEXT_TYPES, blank=True, null=True)
     source = models.CharField(max_length=100, blank=True, null=True)
     category = models.CharField(max_length=100, blank=True, null=True)
     title = models.CharField(max_length=100, blank=True, null=True)
@@ -39,8 +51,8 @@ class Text(models.Model):
 
 
 class Word(models.Model):
-    owner = models.CharField(max_length=4)
-    userid = models.IntegerField(blank=True, null=True)
+    owner = models.CharField(max_length=4, choices=OWNER)
+    username = models.CharField(max_length=100, blank=True, null=True)
     source = models.CharField(max_length=100, blank=True, null=True)
     role = models.CharField(max_length=100, blank=True, null=True)
     word = models.TextField(blank=True, null=True)

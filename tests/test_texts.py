@@ -14,8 +14,8 @@ class TextTestCase(TestCase):
                          She refused to sign the final adoption papers. She only relented a few months later when my parents promised that I would someday go to college."
 
         text, text_created = Text.objects.get_or_create(owner='VA',
-                                                        userid="1000",
-                                                        type="e-mail",
+                                                        username='',
+                                                        type="PPT",
                                                         source='book',
                                                         category='business',
                                                         title='스티브잡스 연설',
@@ -29,7 +29,7 @@ class TextTestCase(TestCase):
     def test_text_is_created(self):
         self.texts_test = Text.objects.all().first()
         owner = self.texts_test.owner
-        userid = self.texts_test.userid
+        username = self.texts_test.username
         type = self.texts_test.type
         source = self.texts_test.source
         category = self.texts_test.category
@@ -37,8 +37,8 @@ class TextTestCase(TestCase):
         template = self.texts_test.template
         translated = self.texts_test.translated
         self.assertEqual(owner, 'VA')
-        self.assertEqual(userid, 1000)
-        self.assertEqual(type, 'e-mail')
+        self.assertEqual(username, '')
+        self.assertEqual(type, 'PPT')
         self.assertEqual(source, 'book')
         self.assertEqual(category, 'business')
         self.assertEqual(title, '스티브잡스 연설')

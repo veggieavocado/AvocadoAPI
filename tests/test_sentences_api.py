@@ -41,8 +41,8 @@ class SentenceAPITestCase(TestCase):
         }
         # create sentence data
         self.sentence = {
-                        'owner': 'va',
-                        'userid': 1000,
+                        'owner': 'VA',
+                        'username': '',
                         'source': 'TED',
                         'role': 'ppt',
                         'detail_role': '인사',
@@ -106,12 +106,13 @@ class SentenceAPITestCase(TestCase):
         )
         data = response.json()['results'][0]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data['owner'], 'va')
-        self.assertEqual(data['userid'], 1000)
+        self.assertEqual(data['owner'], 'VA')
+        self.assertEqual(data['username'], '')
         self.assertEqual(data['source'], 'TED')
 
         # put
-        self.sentence['owner'] = 'U'
+        self.sentence['owner'] = 'USER'
+        self.sentence['username'] = 'lee'
         # authorized case
         response = self.client.put(
             URL['sentence_put_delete'],
@@ -119,7 +120,6 @@ class SentenceAPITestCase(TestCase):
             format='json',
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
 
         response = self.client.put(
             URL['sentence_put_delete'],
@@ -129,8 +129,8 @@ class SentenceAPITestCase(TestCase):
         )
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data['owner'], 'U')
-        self.assertEqual(data['userid'], 1000)
+        self.assertEqual(data['owner'], 'USER')
+        self.assertEqual(data['username'], 'lee')
         self.assertEqual(data['source'], 'TED')
 
         #delete
