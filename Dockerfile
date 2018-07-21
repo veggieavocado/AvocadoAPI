@@ -13,4 +13,4 @@ ENV DOCKER_CONTAINER=1
 
 EXPOSE 8000
 
-CMD ["uwsgi", "--ini", "/app/uwsgi.ini"]
+CMD ["uwsgi", "--ini", "/app/config/uwsgi.ini"]

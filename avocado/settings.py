@@ -2,7 +2,8 @@ import os
 import raven
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = '(1*))8!e15ouzj635vf&of1l#x)n%w!hiw2k@!^rnq8sv!zssx'
+DEBUG = True
+SECRET_KEY = '4w=ni_m52itcdzl6h1zl4+!0de6-4#qt%nl04xvx%x5(a-$slw'
 ALLOWED_HOSTS = ['127.0.0.1', '127.0.1.1']
 
 INSTALLED_APPS = [
@@ -14,7 +15,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'raven.contrib.django.raven_compat',
     'rest_framework',
-
 
     'accounts',
     'services',
@@ -43,7 +43,7 @@ ROOT_URLCONF = 'avocado.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -51,9 +51,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-
-                'templates.context_processors.ga_tracking_id',
-                'templates.context_processors.use_ga',
             ],
         },
     },
@@ -90,6 +87,10 @@ USE_L10N = True
 USE_TZ = False
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static-dist/')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static/'),
+]
 
 # djangorestframework-jwt
 REST_FRAMEWORK = {
