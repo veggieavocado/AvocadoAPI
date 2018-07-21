@@ -14,6 +14,8 @@ from services.models import Word
 from accounts.models import Profile
 User = get_user_model()
 
+from tests.url_endpoints import URL
+
 class WordAPITestCase(TestCase):
     '''
     Word REST API testing module
@@ -49,7 +51,7 @@ class WordAPITestCase(TestCase):
 
 
         response = self.client.post(
-            '/api/v1/services/accounts/user/',
+            URL['user_create_url'],
             self.user,
             format='json'
         )
@@ -63,7 +65,7 @@ class WordAPITestCase(TestCase):
             assert 1 == 1 # 트레브시에서는 테스트 넘어가기
         else:
             response = self.client.post(
-                '/api/v1/services/accounts/api-token-auth/',
+                URL['get_jwt_token'],
                 json.dumps(self.userdata),
                 content_type='application/json'
             )
@@ -79,7 +81,7 @@ class WordAPITestCase(TestCase):
         # post
         # unauthorized case
         response = self.client.post(
-            '/api/v1/services/word/',
+            URL['word_get_post'],
             self.word,
             format='json',
         )
@@ -87,7 +89,7 @@ class WordAPITestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         # authorized case
         response = self.client.post(
-            '/api/v1/services/word/',
+            URL['word_get_post'],
             self.word,
             HTTP_AUTHORIZATION='JWT ' + self.token,
             format='json',
@@ -97,7 +99,7 @@ class WordAPITestCase(TestCase):
 
         # authorized case
         response = self.client.get(
-            '/api/v1/services/word/',
+            URL['word_get_post'],
             HTTP_AUTHORIZATION='JWT ' + self.token,
             format='json',
         )
@@ -112,7 +114,7 @@ class WordAPITestCase(TestCase):
         self.word['owner'] = 'U'
         # authorized case
         response = self.client.put(
-            '/api/v1/services/word/1/',
+            URL['word_put_delete'],
             self.word,
             format='json',
         )
@@ -120,7 +122,7 @@ class WordAPITestCase(TestCase):
 
 
         response = self.client.put(
-            '/api/v1/services/word/1/',
+            URL['word_put_delete'],
             self.word,
             HTTP_AUTHORIZATION='JWT ' + self.token,
             format='json',
@@ -133,7 +135,7 @@ class WordAPITestCase(TestCase):
 
         #delete
         response = self.client.delete(
-            '/api/v1/services/word/1/',
+            URL['word_put_delete'],
             format='json',
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -141,7 +143,7 @@ class WordAPITestCase(TestCase):
 
 
         response = self.client.delete(
-            '/api/v1/services/word/1/',
+            URL['word_put_delete'],
             HTTP_AUTHORIZATION='JWT ' + self.token,
             format='json',
         )

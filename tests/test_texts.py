@@ -17,7 +17,7 @@ class TextTestCase(TestCase):
                                                         userid="1000",
                                                         type="e-mail",
                                                         source='book',
-                                                        cartegory='business',
+                                                        category='business',
                                                         title='스티브잡스 연설',
                                                         template=self.example ,
                                                         translated=self.example,
@@ -32,7 +32,7 @@ class TextTestCase(TestCase):
         userid = self.texts_test.userid
         type = self.texts_test.type
         source = self.texts_test.source
-        cartegory = self.texts_test.cartegory
+        category = self.texts_test.category
         title = self.texts_test.title
         template = self.texts_test.template
         translated = self.texts_test.translated
@@ -40,7 +40,7 @@ class TextTestCase(TestCase):
         self.assertEqual(userid, 1000)
         self.assertEqual(type, 'e-mail')
         self.assertEqual(source, 'book')
-        self.assertEqual(cartegory, 'business')
+        self.assertEqual(category, 'business')
         self.assertEqual(title, '스티브잡스 연설')
         self.assertEqual(template, self.example)
         self.assertEqual(translated, self.example)

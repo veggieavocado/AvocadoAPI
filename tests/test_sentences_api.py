@@ -14,6 +14,8 @@ from services.models import Sentence
 from accounts.models import Profile
 User = get_user_model()
 
+from tests.url_endpoints import URL
+
 class SentenceAPITestCase(TestCase):
     '''
     Sentence REST API testing module
@@ -37,7 +39,7 @@ class SentenceAPITestCase(TestCase):
             'username': self.username,
             'password': self.password,
         }
-        # create sentece data
+        # create sentence data
         self.sentence = {
                         'owner': 'va',
                         'userid': 1000,
@@ -50,7 +52,7 @@ class SentenceAPITestCase(TestCase):
 
 
         response = self.client.post(
-            '/api/accounts/user/',
+            URL['user_create_url'],
             self.user,
             format='json'
         )
@@ -64,7 +66,7 @@ class SentenceAPITestCase(TestCase):
             assert 1 == 1 # 트레브시에서는 테스트 넘어가기
         else:
             response = self.client.post(
-                '/api/accounts/api-token-auth/',
+                URL['get_jwt_token'],
                 json.dumps(self.userdata),
                 content_type='application/json'
             )
@@ -80,7 +82,7 @@ class SentenceAPITestCase(TestCase):
         # post
         # unauthorized case
         response = self.client.post(
-            '/api/v1/services/sentence/',
+            URL['sentence_get_post'],
             self.sentence,
             format='json',
         )
@@ -88,7 +90,7 @@ class SentenceAPITestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         # authorized case
         response = self.client.post(
-            '/api/v1/services/sentence/',
+            URL['sentence_get_post'],
             self.sentence,
             HTTP_AUTHORIZATION='JWT ' + self.token,
             format='json',
@@ -98,7 +100,7 @@ class SentenceAPITestCase(TestCase):
 
         # authorized case
         response = self.client.get(
-            '/api/v1/services/sentence/',
+            URL['sentence_get_post'],
             HTTP_AUTHORIZATION='JWT ' + self.token,
             format='json',
         )
@@ -108,12 +110,11 @@ class SentenceAPITestCase(TestCase):
         self.assertEqual(data['userid'], 1000)
         self.assertEqual(data['source'], 'TED')
 
-
         # put
         self.sentence['owner'] = 'U'
         # authorized case
         response = self.client.put(
-            '/api/v1/services/sentence/1/',
+            URL['sentence_put_delete'],
             self.sentence,
             format='json',
         )
@@ -121,7 +122,7 @@ class SentenceAPITestCase(TestCase):
 
 
         response = self.client.put(
-            '/api/v1/services/sentence/1/',
+            URL['sentence_put_delete'],
             self.sentence,
             HTTP_AUTHORIZATION='JWT ' + self.token,
             format='json',
@@ -134,7 +135,7 @@ class SentenceAPITestCase(TestCase):
 
         #delete
         response = self.client.delete(
-            '/api/v1/services/sentence/1/',
+            URL['sentence_put_delete'],
             format='json',
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -142,7 +143,7 @@ class SentenceAPITestCase(TestCase):
 
 
         response = self.client.delete(
-            '/api/v1/services/sentence/1/',
+            URL['sentence_put_delete'],
             HTTP_AUTHORIZATION='JWT ' + self.token,
             format='json',
         )

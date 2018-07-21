@@ -14,6 +14,8 @@ from services.models import State
 from accounts.models import Profile
 User = get_user_model()
 
+from tests.url_endpoints import URL
+
 class StateAPITestCase(TestCase):
     '''
     State REST API testing module
@@ -45,7 +47,7 @@ class StateAPITestCase(TestCase):
 
 
         response = self.client.post(
-            '/api/v1/services/accounts/user/',
+            URL['user_create_url'],
             self.user,
             format='json'
         )
@@ -59,7 +61,7 @@ class StateAPITestCase(TestCase):
             assert 1 == 1 # 트레브시에서는 테스트 넘어가기
         else:
             response = self.client.post(
-                '/api/v1/services/accounts/api-token-auth/',
+                URL['get_jwt_token'],
                 json.dumps(self.userdata),
                 content_type='application/json'
             )
@@ -75,7 +77,7 @@ class StateAPITestCase(TestCase):
         # post
         # unauthorized case
         response = self.client.post(
-            '/api/v1/services/state/',
+            URL['state_get_post'],
             self.state,
             format='json',
         )
@@ -83,7 +85,7 @@ class StateAPITestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         # authorized case
         response = self.client.post(
-            '/api/v1/services/state/',
+            URL['state_get_post'],
             self.state,
             HTTP_AUTHORIZATION='JWT ' + self.token,
             format='json',
@@ -93,7 +95,7 @@ class StateAPITestCase(TestCase):
 
         # authorized case
         response = self.client.get(
-            '/api/v1/services/state/',
+            URL['state_get_post'],
             HTTP_AUTHORIZATION='JWT ' + self.token,
             format='json',
         )
@@ -105,7 +107,7 @@ class StateAPITestCase(TestCase):
         self.state['status'] = 1
         # authorized case
         response = self.client.put(
-            '/api/state/1/',
+            URL['state_put_delete'],
             self.state,
             format='json',
         )
@@ -113,7 +115,7 @@ class StateAPITestCase(TestCase):
 
 
         response = self.client.put(
-            '/api/v1/services/state/1/',
+            URL['state_put_delete'],
             self.state,
             HTTP_AUTHORIZATION='JWT ' + self.token,
             format='json',
@@ -123,7 +125,7 @@ class StateAPITestCase(TestCase):
 
         #delete
         response = self.client.delete(
-            '/api/v1/services/state/1/',
+            URL['state_put_delete'],
             format='json',
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -131,7 +133,7 @@ class StateAPITestCase(TestCase):
 
 
         response = self.client.delete(
-            '/api/v1/services/state/1/',
+            URL['state_put_delete'],
             HTTP_AUTHORIZATION='JWT ' + self.token,
             format='json',
         )

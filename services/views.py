@@ -129,7 +129,7 @@ class WordDetailsAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 # State view GET POST
 class StateAPIView(generics.ListCreateAPIView):
-    queryset = State.objects.all()
+    queryset = State.objects.all().order_by('-id')
     serializer_class = StateSerializer
     pagination_class = StandardResultPagination
     filter_backends = [SearchFilter, OrderingFilter]

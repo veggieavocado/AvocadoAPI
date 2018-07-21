@@ -14,6 +14,8 @@ from services.models import Text
 from accounts.models import Profile
 User = get_user_model()
 
+from tests.url_endpoints import URL
+
 class TextAPITestCase(TestCase):
     '''
     Text REST API testing module
@@ -50,7 +52,7 @@ class TextAPITestCase(TestCase):
                         'userid':1000,
                         'type':'e-mail',
                         'source':'book',
-                        'cartegory':'business',
+                        'category':'business',
                         'title':'스티브잡스 연설',
                         'template':example ,
                         'translated':example,
@@ -58,7 +60,7 @@ class TextAPITestCase(TestCase):
 
 
         response = self.client.post(
-            '/api/v1/services/accounts/user/',
+            URL['user_create_url'],
             self.user,
             format='json'
         )
@@ -72,7 +74,7 @@ class TextAPITestCase(TestCase):
             assert 1 == 1 # 트레브시에서는 테스트 넘어가기
         else:
             response = self.client.post(
-                '/api/v1/services/accounts/api-token-auth/',
+                URL['get_jwt_token'],
                 json.dumps(self.userdata),
                 content_type='application/json'
             )
@@ -88,7 +90,7 @@ class TextAPITestCase(TestCase):
         # post
         # unauthorized case
         response = self.client.post(
-            '/api/text/',
+            URL['text_get_post'],
             self.text,
             format='json',
         )
@@ -96,7 +98,7 @@ class TextAPITestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         # authorized case
         response = self.client.post(
-            '/api/text/',
+            URL['text_get_post'],
             self.text,
             HTTP_AUTHORIZATION='JWT ' + self.token,
             format='json',
@@ -106,7 +108,7 @@ class TextAPITestCase(TestCase):
 
         # authorized case
         response = self.client.get(
-            '/api/text/',
+            URL['text_get_post'],
             HTTP_AUTHORIZATION='JWT ' + self.token,
             format='json',
         )
@@ -120,7 +122,7 @@ class TextAPITestCase(TestCase):
         self.text['owner'] = 'U'
         # authorized case
         response = self.client.put(
-            '/api/text/1/',
+            URL['text_put_delete'],
             self.text,
             format='json',
         )
@@ -128,7 +130,7 @@ class TextAPITestCase(TestCase):
 
 
         response = self.client.put(
-            '/api/text/1/',
+            URL['text_put_delete'],
             self.text,
             HTTP_AUTHORIZATION='JWT ' + self.token,
             format='json',
@@ -140,7 +142,7 @@ class TextAPITestCase(TestCase):
 
         #delete
         response = self.client.delete(
-            '/api/text/1/',
+            URL['text_put_delete'],
             format='json',
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -148,7 +150,7 @@ class TextAPITestCase(TestCase):
 
 
         response = self.client.delete(
-            '/api/text/1/',
+            URL['text_put_delete'],
             HTTP_AUTHORIZATION='JWT ' + self.token,
             format='json',
         )
