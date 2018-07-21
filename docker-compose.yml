@@ -17,6 +17,10 @@ services:
     container_name: api-server
     depends_on:
       - db
+      - cache
+    links:
+      - db:db
+      - cache:cache
     ports:
       - 8000:8000
     restart: unless-stopped
@@ -25,7 +29,6 @@ services:
     container_name: api-db
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
     image: postgres:9.6
     ports:
       - 5432:5432
@@ -34,6 +37,17 @@ services:
       - pg_backups:/pg_backups
     restart: unless-stopped
 
+  cache:
+    image: redis
+    container_name: api-cache
+    command: redis-server --appendonly yes
+    ports:
+      - 6379:6379
+    volumes:
+      - cache_data:/data
+    restart: unless-stopped
+
 volumes:
   pg_data:
   pg_backups:
+  cache_data:

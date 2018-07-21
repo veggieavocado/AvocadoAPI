@@ -8,8 +8,8 @@ COPY . /app
 
 RUN pip3 install -r /app/requirements.txt
 
-ENV DJANGO_ENV=prod
-ENV DOCKER_CONTAINER=1
+ENV DJANGO_ENV=production
+ENV DOCKER_CONTAINER=True
 
 EXPOSE 8000
 
