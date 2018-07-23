@@ -24,7 +24,6 @@ execnet==1.5.0
 Fabric3==1.14.post1
 html5lib==1.0.1
 idna==2.6
-jwt==0.5.3
 kombu==4.1.0
 lxml==4.1.1
 more-itertools==4.2.0
