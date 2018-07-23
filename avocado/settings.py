@@ -22,7 +22,7 @@ KEY = KEY.encode() # 스트링값 바이트로 변경
 cipher_suite = Fernet(KEY)
 
 ciphered_ip = b'gAAAAABbUuztdRPMIpZ9l9Qgh7P-egEEHEHhEcm05nJpAzQi-4rCXDXZGp9rdjFultU8okqISgemKA_Tn6G8pdKlOCZweL40dg=='
-IP_ADDRESS = cipher_suite.decrypt(ciphered_ip)
+IP_ADDRESS = cipher_suite.decrypt(ciphered_ip).decode()
 
 ALLOWED_HOSTS = ['127.0.0.1', '127.0.1.1', IP_ADDRESS]
 
@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     # Sentry: 에러 로깅
     'raven.contrib.django.raven_compat',
@@ -98,10 +99,11 @@ if testing == 'True' or django_env == 'local':
 elif django_env == 'production':
     database_option = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'postgres',
-            'USER': 'postgres',
-            'HOST': 'db',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'avocado',
+            'USER': 'avocado',
+            'PASSWORD': 'veggieavocado2018',
+            'HOST': IP_ADDRESS,
             'PORT': 5432,
         }
     }

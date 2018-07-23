@@ -6,10 +6,18 @@ RUN apt-get update && \
 
 COPY . /app
 
+RUN pip3 install -q Django==1.11
 RUN pip3 install -r /app/requirements.txt
 
 ENV DJANGO_ENV=production
 ENV DOCKER_CONTAINER=True
+
+WORKDIR /app
+RUN python3 manage.py makemigrations
+RUN python3 manage.py makemigrations accounts
+RUN python3 manage.py makemigrations services
+RUN python3 manage.py migrate auth
+RUN python3 manage.py migrate
 
 EXPOSE 8000
 
