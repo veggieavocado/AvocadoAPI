@@ -7,3 +7,4 @@ db.sqlite3
 .pytest_cache/
 api_env/
 data/
+crypt_key.py

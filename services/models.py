@@ -1,16 +1,16 @@
 from django.db import models
-OWNER = {
+
+OWNER = (
     ('VA', '베지아보카도'),
     ('USER', '사용자'),
-}
+)
 
-TEXT_TYPES = {
+TEXT_TYPES = (
     ('PPT', '프레젠테이션'),
     ('MAIL', '이메일'),
     ('SOP', '자기소개서'),
     ('RESUME', '이력서'),
-}
-
+)
 
 TYPES = (
     ('TEXT', '템플릿'),
@@ -37,6 +37,7 @@ class Sentence(models.Model):
     
     def __str__(self):
         return "{}".format(self.owner)
+
 
 class Text(models.Model):
     owner = models.CharField(max_length=4, choices=OWNER)
