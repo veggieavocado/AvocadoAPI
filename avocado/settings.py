@@ -35,6 +35,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
+    # corsheaders
+    'corsheaders',
+
     # Sentry: 에러 로깅
     'raven.contrib.django.raven_compat',
 
@@ -55,6 +58,7 @@ RAVEN_CONFIG = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -152,6 +156,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static-dist/')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static/'),
 ]
+
+# https://github.com/ottoyiu/django-cors-headers
+CORS_ORIGIN_ALLOW_ALL = True # 외부에서 API 요청 가능하도록 새팅
 
 # djangorestframework-jwt
 REST_FRAMEWORK = {
