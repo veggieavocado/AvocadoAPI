@@ -8,3 +8,5 @@ db.sqlite3
 api_env/
 data/
 crypt_key.py
+deeplearning_test/
+.ipynb_checkpoints/
