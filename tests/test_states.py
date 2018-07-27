@@ -11,7 +11,7 @@ class StateTestCase(TestCase):
         self.assertTrue(state_created, msg='failed to save user data')
         self.assertEqual(State.objects.all().count(), 1, msg='user data not created properly')
 
-    def test_user_is_created(self):
+    def test_state_is_created(self):
         self.state_test = State.objects.all().first()
         type = self.state_test.type
         status = self.state_test.status

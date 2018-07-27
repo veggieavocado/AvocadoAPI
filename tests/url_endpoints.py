@@ -13,4 +13,6 @@ URL = {
     'word_put_delete':'/api/v1/services/word/1/',
     'text_get_post':'/api/v1/services/text/',
     'text_put_delete':'/api/v1/services/text/1/',
+    'sent_swap_get_post':'/api/v1/services/sent_swap/',
+    'sent_swap_delete':'/api/v1/services/sent_swap/1/',
 }

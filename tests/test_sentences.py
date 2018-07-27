@@ -17,7 +17,7 @@ class SentenceTestCase(TestCase):
         self.assertTrue(sentence_created, msg='failed to save user data')
         self.assertEqual(Sentence.objects.all().count(), 1, msg='user data not created properly')
 
-    def test_user_is_created(self):
+    def test_sentence_is_created(self):
         self.sentence_test = Sentence.objects.all().first()
         owner = self.sentence_test.owner
         username = self.sentence_test.username

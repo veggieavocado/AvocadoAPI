@@ -8,6 +8,7 @@ from services.models import (
     Text,
     Word,
     State,
+    Structure,
     )
 
 from services.serializers import (
@@ -15,6 +16,7 @@ from services.serializers import (
     TextSerializer,
     WordSerializer,
     StateSerializer,
+    StructureSerializer,
     )
 
 from utils.paginations import StandardResultPagination
@@ -186,3 +188,22 @@ class UserResumeView(generics.ListAPIView):
         if username_by:
             queryset = queryset.filter(username=username_by)
         return queryset
+
+
+# Structure
+class StructureAPIView(generics.ListCreateAPIView):
+    queryset = Structure.objects.all()
+    serializer_class = StructureSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = Structure.objects.all().order_by('-id')
+        text_id_by = self.request.GET.get('text')
+        if text_id_by:
+            queryset = queryset.filter(text=text_id_by)
+        return queryset
+
+class StructureDetailAPIView(generics.RetrieveDestroyAPIView):
+    queryset = Structure.objects.all()
+    serializer_class = StructureSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)

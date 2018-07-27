@@ -10,6 +10,8 @@ from services.views import (
     StateAPIView,
     StateDetailsAPIView,
     UserPptView,
+    StructureAPIView,
+    StructureDetailAPIView,
 )
 
 urlpatterns = [
@@ -24,4 +26,8 @@ urlpatterns = [
 
     # User 템플릿 리스트 API
     url(r'^ppt/$', UserPptView.as_view(), name='user-ppt'),
+
+    # Structure API
+    url(r'^sent_swap/$', StructureAPIView.as_view(), name='sent-swap'),
+    url(r'^sent_swap/(?P<pk>[\w.@+-]+)/$', StructureDetailAPIView.as_view(), name='sent-swap-detail'),
 ]

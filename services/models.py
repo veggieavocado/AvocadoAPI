@@ -34,7 +34,7 @@ class Sentence(models.Model):
     translated = models.TextField(blank=True, null=True)
     created = models.DateField(auto_now_add=True)
     updated = models.DateField(auto_now=True)
-    
+
     def __str__(self):
         return "{}".format(self.owner)
 
@@ -72,6 +72,18 @@ class Word(models.Model):
 class State(models.Model):
     type = models.CharField(max_length=4, choices=TYPES, blank=True, null=True)
     status = models.BooleanField(choices=STATUS_TYPES)
+    created = models.DateField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return "{}".format(self.type)
+
+
+class Structure(models.Model):
+    text = models.IntegerField(blank=True, null=True)
+    sentence = models.TextField(blank=True, null=True)
+    role = models.TextField(blank=True, null=True)
+    previous_state = models.IntegerField(blank=True, null=True)
     created = models.DateField(auto_now_add=True)
     updated = models.DateField(auto_now=True)
 

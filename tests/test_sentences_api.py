@@ -34,7 +34,7 @@ class SentenceAPITestCase(TestCase):
             'password': self.password,
         }
 
-        # 테스트영 user-data 생성
+        # 테스트용 user-data 생성
         self.userdata =  {
             'username': self.username,
             'password': self.password,
@@ -61,21 +61,17 @@ class SentenceAPITestCase(TestCase):
         self.assertEqual(User.objects.first().username, self.user['username'])
         self.assertEqual(User.objects.first().email, self.user['email'])
 
-        testing = os.environ['TRAVIS'] if 'TRAVIS' in os.environ else 'False'
-        if testing == 'True':
-            assert 1 == 1 # 트레브시에서는 테스트 넘어가기
-        else:
-            response = self.client.post(
-                URL['get_jwt_token'],
-                json.dumps(self.userdata),
-                content_type='application/json'
-            )
+        response = self.client.post(
+            URL['get_jwt_token'],
+            json.dumps(self.userdata),
+            content_type='application/json'
+        )
 
-            self.token = response.data['token']
-            response_content = json.loads(smart_text(response.content))
-            decoded_payload = utils.jwt_decode_handler(response_content['token'])
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
-            self.assertEqual(decoded_payload['username'], self.username)
+        self.token = response.data['token']
+        response_content = json.loads(smart_text(response.content))
+        decoded_payload = utils.jwt_decode_handler(response_content['token'])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(decoded_payload['username'], self.username)
 
 
     def test_sentence_api(self):

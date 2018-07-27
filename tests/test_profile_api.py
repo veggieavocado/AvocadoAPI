@@ -52,120 +52,116 @@ class UserAPITestCase(TestCase):
 
     def test_jwt_token(self):
         print('Strating JWT token test')
-        testing = os.environ['TRAVIS'] if 'TRAVIS' in os.environ else 'False'
-        if testing == 'True':
-            assert 1 == 1 # 트레브시에서는 테스트 넘어가기
-        else:
-            response = self.client.post(
-                URL['get_jwt_token'],
-                json.dumps(self.userdata),
-                content_type='application/json'
-            )
-            print(response.json())
-            token = response.data['token']
-            response_content = json.loads(smart_text(response.content))
-            decoded_payload = utils.jwt_decode_handler(response_content['token'])
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
-            self.assertEqual(decoded_payload['username'], self.username)
+        response = self.client.post(
+            URL['get_jwt_token'],
+            json.dumps(self.userdata),
+            content_type='application/json'
+        )
+        print(response.json())
+        token = response.data['token']
+        response_content = json.loads(smart_text(response.content))
+        decoded_payload = utils.jwt_decode_handler(response_content['token'])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(decoded_payload['username'], self.username)
 
-            # user Get Test
-            response = self.client.get(
-                URL['user_create_url'],
-                format='json',
-                HTTP_AUTHORIZATION='JWT ' + token
-            )
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # user Get Test
+        response = self.client.get(
+            URL['user_create_url'],
+            format='json',
+            HTTP_AUTHORIZATION='JWT ' + token
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-            # user Get Test
-            response = self.client.get(
-                URL['user_detail_url'].format(self.user['username']),
-                format='json',
-                HTTP_AUTHORIZATION='JWT ' + token
-            )
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # user Get Test
+        response = self.client.get(
+            URL['user_detail_url'].format(self.user['username']),
+            format='json',
+            HTTP_AUTHORIZATION='JWT ' + token
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-            # Get Test
-            response = self.client.get(
-                URL['profile_get_post'],
-                format='json',
-                HTTP_AUTHORIZATION='JWT ' + token
-            )
+        # Get Test
+        response = self.client.get(
+            URL['profile_get_post'],
+            format='json',
+            HTTP_AUTHORIZATION='JWT ' + token
+        )
 
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-            # Get Test without token
-            response = self.client.get(
-                URL['profile_get_post'],
-                format='json'
-            )
-            self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        # Get Test without token
+        response = self.client.get(
+            URL['profile_get_post'],
+            format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-            user_orm = User.objects.get(username='lee')
-            profile = Profile.objects.get(user=user_orm).user.username
+        user_orm = User.objects.get(username='lee')
+        profile = Profile.objects.get(user=user_orm).user.username
 
-            profile = {
-                'user': profile,
-                'name': 'Hoom',
-                'phone' : '01020003000',
-                'address': 'Seoul',
-            }
-            new_user = {
-                'username': self.username,
-                'email': 'lmh@naver.com',
-                'password': 'test321321321',
-            }
+        profile = {
+            'user': profile,
+            'name': 'Hoom',
+            'phone' : '01020003000',
+            'address': 'Seoul',
+        }
+        new_user = {
+            'username': self.username,
+            'email': 'lmh@naver.com',
+            'password': 'test321321321',
+        }
 
-            # Put Test without token
-            response = self.client.put(
-                URL['user_put_delete'].format(self.user['username']),
-                new_user,
-                format='json'
-            )
-            self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        # Put Test without token
+        response = self.client.put(
+            URL['user_put_delete'].format(self.user['username']),
+            new_user,
+            format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-            # put Test
-            response = self.client.put(
-                URL['user_put_delete'].format(self.user['username']),
-                new_user,
-                HTTP_AUTHORIZATION='JWT ' + token,
-                format='json',
-            )
-            data = response.json()
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
-            self.assertEqual(data['email'], new_user['email'])
+        # put Test
+        response = self.client.put(
+            URL['user_put_delete'].format(self.user['username']),
+            new_user,
+            HTTP_AUTHORIZATION='JWT ' + token,
+            format='json',
+        )
+        data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(data['email'], new_user['email'])
 
-            #profile put test
-            response = self.client.put(
-                URL['profile_put'].format(self.user['username']),
-                profile,
-                HTTP_AUTHORIZATION='JWT ' + token,
-                format='json',
-            )
-            data = response.json()
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
-            self.assertEqual(data['name'], 'Hoom')
-            self.assertEqual(data['address'], 'Seoul')
+        #profile put test
+        response = self.client.put(
+            URL['profile_put'].format(self.user['username']),
+            profile,
+            HTTP_AUTHORIZATION='JWT ' + token,
+            format='json',
+        )
+        data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(data['name'], 'Hoom')
+        self.assertEqual(data['address'], 'Seoul')
 
-            # profile Put Test without token
-            response = self.client.put(
-                URL['profile_put'].format(self.user['username']),
-                profile,
-                format='json'
-            )
-            self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        # profile Put Test without token
+        response = self.client.put(
+            URL['profile_put'].format(self.user['username']),
+            profile,
+            format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-            # delete Test
-            response = self.client.delete(
-                URL['user_put_delete'].format(self.user['username']),
-                HTTP_AUTHORIZATION='JWT ' + token,
-                format='json',
-            )
-            self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        # delete Test
+        response = self.client.delete(
+            URL['user_put_delete'].format(self.user['username']),
+            HTTP_AUTHORIZATION='JWT ' + token,
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-            # deleteTest without token
-            response = self.client.delete(
-                URL['user_put_delete'].format(self.user['username']),
-                format='json'
-            )
-            self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-            self.assertEqual(User.objects.all().count(), 0, msg='user data not delete properly')
+        # deleteTest without token
+        response = self.client.delete(
+            URL['user_put_delete'].format(self.user['username']),
+            format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(User.objects.all().count(), 0, msg='user data not delete properly')

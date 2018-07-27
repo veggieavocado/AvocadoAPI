@@ -172,6 +172,9 @@ REST_FRAMEWORK = {
     ),
 }
 
+# django admin error
+SITE_ID = 1
+
 # ## 만약 도커에서 작동한다면, 서버에서 돌아가고 있기 때문에 API 결과를 json형식으로 리턴해야 한다.
 # if django_env == 'production':
 #     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = ('rest_framework.renderers.JSONRenderer',)

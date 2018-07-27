@@ -4,6 +4,7 @@ from services.models import (
     Text,
     Word,
     State,
+    Structure,
     )
 
 class SentenceSerializer(serializers.ModelSerializer):
@@ -27,4 +28,9 @@ class WordSerializer(serializers.ModelSerializer):
 class StateSerializer(serializers.ModelSerializer):
     class Meta:
         model = State
+        fields = "__all__"
+
+class StructureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Structure
         fields = "__all__"
