@@ -25,6 +25,7 @@ test_sentence = "It started before I was born. My biological mother was a young,
                 She only relented a few months later when my parents promised that I would someday go to college."
 
 def sentence_freq(sentence):
+    # 문장에 나오는 단어 빈도수 계산
     tokens = nltk.word_tokenize(test_sentence)
     stop_words = set(stopwords.words('english'))
     stop_words.add(',')
