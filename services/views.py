@@ -1,4 +1,5 @@
 from rest_framework import generics, permissions
+from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -207,3 +208,17 @@ class StructureDetailAPIView(generics.RetrieveDestroyAPIView):
     queryset = Structure.objects.all()
     serializer_class = StructureSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+
+class PPTCategoriesAPIView(APIView):
+    serializer_class = TextSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    def get(self, request, *args, **kwargs):
+        queryset = Text.objects.filter(type='PPT').values_list('category')
+        queryset = set(queryset)
+        queryset = [category[0] for category in queryset]
+        result = {
+            '카테고리': queryset
+        }
+        return Response(result, status=200)

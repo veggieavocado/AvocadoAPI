@@ -12,6 +12,8 @@ from services.views import (
     UserPptView,
     StructureAPIView,
     StructureDetailAPIView,
+
+    PPTCategoriesAPIView,
 )
 
 urlpatterns = [
@@ -30,4 +32,7 @@ urlpatterns = [
     # Structure API
     url(r'^sent_swap/$', StructureAPIView.as_view(), name='sent-swap'),
     url(r'^sent_swap/(?P<pk>[\w.@+-]+)/$', StructureDetailAPIView.as_view(), name='sent-swap-detail'),
+
+    # 프론트앤드 용도 API
+    url(r'^ppt_categories/$', PPTCategoriesAPIView.as_view(), name='ppt-categories'),
 ]
