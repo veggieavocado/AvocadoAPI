@@ -15,4 +15,7 @@ URL = {
     'text_put_delete':'/api/v1/services/text/1/',
     'sent_swap_get_post':'/api/v1/services/sent_swap/',
     'sent_swap_delete':'/api/v1/services/sent_swap/1/',
+    'ppt_categories':'/api/v1/services/ppt_categories/',
+    'mail_categories':'/api/v1/services/mail_categories/',
+    'text_freq':'/api/v1/services/text_analysis/freq/',
 }

@@ -20,6 +20,7 @@ from services.serializers import (
     StructureSerializer,
     )
 
+from veggie_nltk.textfreq import text_freq
 from utils.paginations import StandardResultPagination
 
 # sentence view GET POST
@@ -222,4 +223,32 @@ class PPTCategoriesAPIView(APIView):
         result = {
             '카테고리': queryset
         }
+        return Response(result, status=200)
+
+
+class EmailCategoriesAPIView(APIView):
+    ## 테스트 할 필요가 있음
+    serializer_class = TextSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    def get(self, request, *args, **kwargs):
+        queryset = Text.objects.filter(type='MAIL').values_list('category')
+        queryset = set(queryset)
+        queryset = [category[0] for category in queryset]
+        result = {
+            '카테고리': queryset
+        }
+        return Response(result, status=200)
+
+
+class TextFreqAPIView(APIView):
+    # serializer_class = TextSerializer
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        text_id = data['text_id']
+        text = Text.objects.get(pk=text_id).template
+        result = text_freq(text)
+
         return Response(result, status=200)
