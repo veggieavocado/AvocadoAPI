@@ -211,6 +211,7 @@ class StructureDetailAPIView(generics.RetrieveDestroyAPIView):
 
 
 class PPTCategoriesAPIView(APIView):
+    ## 테스트 할 필요가 있음
     serializer_class = TextSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
