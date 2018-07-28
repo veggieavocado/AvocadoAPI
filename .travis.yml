@@ -17,6 +17,7 @@ script:
 - python -m pytest -n 3 --cov-config .coveragerc --cov=. -v
 notifications:
   email:
+  - lmhoon012@gmail.com
   - we.veggieavocado@gmail.com
   - ppark9553@gmail.com
   on_success: always
