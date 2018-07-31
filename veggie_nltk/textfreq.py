@@ -16,6 +16,6 @@ def text_freq(text):
     filtered_sentence = [word for word in filtered_sentence if not word.isnumeric()]
     freq= FreqDist(filtered_sentence)
     word_freq = sorted(dict(freq).items(), key=operator.itemgetter(1), reverse=True)
-    hc_list = [{'name':name,'value':value} for name, value in word_freq]
+    hc_list = [{'name':name,'y':value} for name, value in word_freq] # y로 값을 반환하지 않으면 highcharts가 뜨지 않음
     # hc_list = [[name, value] for name, value in word_freq]
     return hc_list
