@@ -66,6 +66,7 @@ class TextAPIView(generics.ListCreateAPIView):
     serializer_class = TextSerializer
     pagination_class = StandardResultPagination
     filter_backends = [SearchFilter, OrderingFilter]
+    permission_classes = (permissions.AllowAny,)
 
     def get_queryset(self, *args, **kwargs):
         queryset = Text.objects.all().order_by('id')

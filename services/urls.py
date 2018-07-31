@@ -38,6 +38,7 @@ urlpatterns = [
     # 프론트앤드 용도 API
     url(r'^ppt_categories/$', PPTCategoriesAPIView.as_view(), name='ppt-categories'),
     url(r'^mail_categories/$', EmailCategoriesAPIView.as_view(), name='mail-categories'),
+    
     # 텍스트 분석 API
     url(r'^text_analysis/freq/$', TextFreqAPIView.as_view(), name='nltk_freq'),
 ]
