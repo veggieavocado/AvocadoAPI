@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # 우박 앱
     'accounts',
     'services',
+    'contents',
 ]
 
 ### Sentry 새팅 ###
