@@ -7,6 +7,7 @@ from rest_framework.test import APIClient
 from rest_framework_jwt import utils, views
 from rest_framework_jwt.compat import get_user_model
 from rest_framework_jwt.settings import api_settings, DEFAULTS
+from time import sleep
 
 import json, os
 from django.utils.encoding import smart_text
@@ -67,6 +68,7 @@ class TextAPITestCase(TestCase):
                     'template':example1 ,
                     'translated':example1,
                     }
+
         self.text2 ={
                     'owner':'VA',
                     'username':'',
@@ -110,6 +112,8 @@ class TextAPITestCase(TestCase):
         self.assertEqual(Text.objects.all().count(), 1, msg='user data not created properly')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+        sleep(0.5)
+
         response = self.client.post(
             URL['text_get_post'],
             self.text2,
@@ -129,5 +133,5 @@ class TextAPITestCase(TestCase):
         print(data['카테고리'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(data['카테고리']), 2)
-        self.assertEqual(data['카테고리'][0], '유명인사')
-        self.assertEqual(data['카테고리'][1], '경영 전략')
+        self.assertEqual(data['카테고리'][0], '경영 전략')
+        self.assertEqual(data['카테고리'][1], '유명인사')

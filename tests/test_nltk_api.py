@@ -127,9 +127,10 @@ class TextAPITestCase(TestCase):
             format='json',
         )
         result1 = response.json()
+        print(result1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(result1[0]['name'], 'college')
-        self.assertEqual(result1[0]['value'], 4)
+        self.assertEqual(result1[0]['y'], 4)
 
         data2 = {'text_id':2}
         response = self.client.post(
@@ -141,4 +142,4 @@ class TextAPITestCase(TestCase):
         print(result2)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(result2[0]['name'], 'across')
-        self.assertEqual(result2[0]['value'], 2)
+        self.assertEqual(result2[0]['y'], 2)

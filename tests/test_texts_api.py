@@ -85,13 +85,13 @@ class TextAPITestCase(TestCase):
     def test_text_api(self):
         # post
         # unauthorized case
-        response = self.client.post(
-            URL['text_get_post'],
-            self.text,
-            format='json',
-        )
-        self.assertEqual(Text.objects.all().count(), 0, msg='user data not created properly')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        # response = self.client.post(
+        #     URL['text_get_post'],
+        #     self.text,
+        #     format='json',
+        # )
+        # self.assertEqual(Text.objects.all().count(), 0, msg='user data not created properly')
+        # self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         # authorized case
         response = self.client.post(
             URL['text_get_post'],
