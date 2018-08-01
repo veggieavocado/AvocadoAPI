@@ -23,6 +23,7 @@ from services.serializers import (
 from veggie_nltk.textfreq import text_freq
 from utils.paginations import StandardResultPagination
 
+
 # sentence view GET POST
 class SentenceAPIView(generics.ListCreateAPIView):
     queryset = Sentence.objects.all()
@@ -48,17 +49,19 @@ class SentenceAPIView(generics.ListCreateAPIView):
         if source_by:
             queryset = queryset.filter(source=source_by)
         if role_by:
-            queryset = queryset.filter(role=role_by)
+            queryset = queryset.filter(role__contains=role_by)
         if detail_role_by:
             queryset = queryset.filter(detail_role=detail_role_by)
 
         return queryset
+
 
 # sentence view PUT DELETE
 class SentenceDetailsAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sentence.objects.all()
     serializer_class = SentenceSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
 
 #Text Views GET POST
 class TextAPIView(generics.ListCreateAPIView):
@@ -92,10 +95,12 @@ class TextAPIView(generics.ListCreateAPIView):
 
         return queryset
 
+
 # TEXT view PUT DELETE
 class TextDetailsAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Text.objects.all()
     serializer_class = TextSerializer
+
 
 # Word view GET POST
 class WordAPIView(generics.ListCreateAPIView):
@@ -127,10 +132,12 @@ class WordAPIView(generics.ListCreateAPIView):
 
         return queryset
 
+
 # Word view PUT DELETE
 class WordDetailsAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Word.objects.all()
     serializer_class = WordSerializer
+
 
 # State view GET POST
 class StateAPIView(generics.ListCreateAPIView):
@@ -139,10 +146,12 @@ class StateAPIView(generics.ListCreateAPIView):
     pagination_class = StandardResultPagination
     filter_backends = [SearchFilter, OrderingFilter]
 
+
 # State view PUT DELETE
 class StateDetailsAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = State.objects.all()
     serializer_class = StateSerializer
+
 
 # PPT view GET
 class UserPptView(generics.ListAPIView):
@@ -156,6 +165,7 @@ class UserPptView(generics.ListAPIView):
             queryset = queryset.filter(username=username_by)
         return queryset
 
+
 # MAIL view GET
 class UserMailView(generics.ListAPIView):
     queryset = Text.objects.filter(type='MAIL')
@@ -168,6 +178,7 @@ class UserMailView(generics.ListAPIView):
             queryset = queryset.filter(username=username_by)
         return queryset
 
+
 # MAIL view GET
 class UserSopView(generics.ListAPIView):
     queryset = Text.objects.filter(type='SOP')
@@ -179,6 +190,7 @@ class UserSopView(generics.ListAPIView):
         if username_by:
             queryset = queryset.filter(username=username_by)
         return queryset
+
 
 # MAIL view GET
 class UserResumeView(generics.ListAPIView):
@@ -205,6 +217,7 @@ class StructureAPIView(generics.ListCreateAPIView):
         if text_id_by:
             queryset = queryset.filter(text=text_id_by)
         return queryset
+
 
 class StructureDetailAPIView(generics.RetrieveDestroyAPIView):
     queryset = Structure.objects.all()
