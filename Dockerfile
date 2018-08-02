@@ -19,7 +19,7 @@ RUN python3 manage.py makemigrations contents
 RUN python3 manage.py makemigrations services
 RUN python3 manage.py migrate auth
 RUN python3 manage.py migrate
-RUN python manage.py collectstatic --noinput
+RUN python3 manage.py collectstatic --noinput
 
 EXPOSE 8000
 
