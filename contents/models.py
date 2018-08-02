@@ -10,4 +10,4 @@ class WantedContent(models.Model):
     updated = models.DateField(auto_now=True)
 
     def __str__(self):
-        return "{}".format(self.owner)
+        return "{} - {}".format(self.title, self.company)

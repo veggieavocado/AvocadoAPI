@@ -36,7 +36,7 @@ class Sentence(models.Model):
     updated = models.DateField(auto_now=True)
 
     def __str__(self):
-        return "{}".format(self.owner)
+        return "{} - {}".format(self.role, self.sentence)
 
 
 class Text(models.Model):
@@ -52,7 +52,7 @@ class Text(models.Model):
     updated = models.DateField(auto_now=True)
 
     def __str__(self):
-        return "{}".format(self.owner)
+        return "{} - {}".format(self.type, self.template)
 
 
 class Word(models.Model):
@@ -66,7 +66,7 @@ class Word(models.Model):
     updated = models.DateField(auto_now=True)
 
     def __str__(self):
-        return "{}".format(self.owner)
+        return "{} - {}".format(self.role, self.word)
 
 
 class State(models.Model):
