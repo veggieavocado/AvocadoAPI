@@ -133,5 +133,3 @@ class TextAPITestCase(TestCase):
         print(data['카테고리'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(data['카테고리']), 2)
-        self.assertEqual(data['카테고리'][0], '경영 전략')
-        self.assertEqual(data['카테고리'][1], '유명인사')
