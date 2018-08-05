@@ -2,9 +2,9 @@ import nltk
 import operator
 nltk.download('punkt')
 nltk.download("stopwords")
+from nltk import FreqDist, ngrams, pos_tag
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-from nltk import FreqDist, ngrams
+from nltk.tokenize import word_tokenize, sent_tokenize
 
 def text_freq(text):
     tokens = nltk.word_tokenize(text)
@@ -19,3 +19,20 @@ def text_freq(text):
     hc_list = [{'name':name,'y':value} for name, value in word_freq] # y로 값을 반환하지 않으면 highcharts가 뜨지 않음
     # hc_list = [[name, value] for name, value in word_freq]
     return hc_list
+
+def sentence_tokenize(text):
+    sentence_tokens = sent_tokenize(text)
+    sentece_list = {'sentences':sentence_tokens}
+    return sentece_list
+
+def word_pos_tag(text):
+    tokens = nltk.word_tokenize(text)
+    stop_words = set(stopwords.words('english'))
+    stop_words.add(',')
+    stop_words.add('.')
+    filtered_sentence = [w for w in tokens if not w.lower() in stop_words]
+    filtered_sentence = [word for word in filtered_sentence if len(word) > 3]
+    filtered_sentence = [word for word in filtered_sentence if not word.isnumeric()]
+    pos_tag_list = pos_tag(filtered_sentence)
+    pos_tag_result = {'pos_tags':pos_tag_list}
+    return pos_tag_result

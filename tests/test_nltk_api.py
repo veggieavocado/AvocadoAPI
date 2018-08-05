@@ -56,6 +56,11 @@ class TextAPITestCase(TestCase):
                     In just its third year, Hitch served 30 million trips in this past holiday season, the longest of which was further than 1,500 miles.\
                     That\'s about the distance from Miami to Boston. This enormous need of migrant workers has powered fast upgrade and\
                     innovation across the country\'s transport systems."
+
+        example3 = "South Korea’s tax burden this year is likely to surpass 20 percent of gross domestic product for the first time, on the back of the government’s expansionist fiscal operations, officials said Sunday.\
+                    The nation’s tax income this year is estimated at 365 trillion won ($323.6 billion), up 5.5 percent from the previous year, according to data compiled by the Ministry of Economy and Finance and Ministry of Interior and Safety.\
+                    Of the estimated total, national taxes will account for 287.1 trillion won, up 19 trillion won from the initial target amount, the Finance Ministry said. \
+                    The Interior Ministry, in charge of local affairs and taxes, suggested that local taxes will total at 77.9 trillion won."
         # create sentece data
         self.text1 = {
                     'owner':'USER',
@@ -78,6 +83,16 @@ class TextAPITestCase(TestCase):
                     'translated':example2,
                     }
 
+        self.text3 ={
+                    'owner':'USER',
+                    'username':'',
+                    'type':'',
+                    'source':'',
+                    'category':'',
+                    'title':'',
+                    'template':example3 ,
+                    'translated':example3,
+                    }
 
         response = self.client.post(
             URL['user_create_url'],
@@ -119,7 +134,7 @@ class TextAPITestCase(TestCase):
         self.assertEqual(Text.objects.all().count(), 2, msg='user data not created properly')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_nltk_api(self):
+    def test_freq_api(self):
         data1 = {'text_id':1}
         response = self.client.post(
             URL['text_freq'],
@@ -139,7 +154,62 @@ class TextAPITestCase(TestCase):
             format='json',
         )
         result2 = response.json()
-        print(result2)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(result2[0]['name'], 'across')
         self.assertEqual(result2[0]['y'], 2)
+
+
+    def test_sent_token(self):
+        response = self.client.post(
+            URL['text_get_post'],
+            self.text3,
+            HTTP_AUTHORIZATION='JWT ' + self.token,
+            format='json',
+        )
+        self.assertEqual(Text.objects.all().count(), 3, msg='user data not created properly')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        data3 = {'text_id':3}
+        response = self.client.post(
+            URL['sent_token'],
+            data3,
+            format='json',
+        )
+        result3 = response.json()
+        print(result3['sentences'])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(result3['sentences']), 4)
+
+    def test_sent_token(self):
+        response = self.client.post(
+            URL['text_get_post'],
+            self.text3,
+            HTTP_AUTHORIZATION='JWT ' + self.token,
+            format='json',
+        )
+        self.assertEqual(Text.objects.all().count(), 3, msg='user data not created properly')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        data3 = {'text_id':3}
+        response = self.client.post(
+            URL['sent_token'],
+            data3,
+            format='json',
+        )
+        result3 = response.json()
+        print(result3['sentences'])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(result3['sentences']), 4)
+
+    def test_pos_tags(self):
+        data4 = {'text_id':2}
+        response = self.client.post(
+            URL['pos_tags'],
+            data4,
+            format='json',
+        )
+        result3 = response.json()
+        print(result3['pos_tags'][0])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(result3['pos_tags']), 79)
+        self.assertEqual(result3['pos_tags'][0], ['technology', 'NN'])

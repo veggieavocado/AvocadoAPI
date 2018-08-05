@@ -18,4 +18,6 @@ URL = {
     'ppt_categories':'/api/v1/services/ppt_categories/',
     'mail_categories':'/api/v1/services/mail_categories/',
     'text_freq':'/api/v1/services/text_analysis/freq/',
+    'sent_token':'/api/v1/services/text_analysis/sent_token/',
+    'pos_tags':'/api/v1/services/text_analysis/pos_tags/'
 }
