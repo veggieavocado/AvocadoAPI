@@ -2,6 +2,7 @@ import nltk
 import operator
 nltk.download('punkt')
 nltk.download("stopwords")
+nltk.download('averaged_perceptron_tagger')
 from nltk import FreqDist, ngrams, pos_tag
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
