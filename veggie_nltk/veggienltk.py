@@ -23,8 +23,8 @@ def text_freq(text):
 
 def sentence_tokenize(text):
     sentence_tokens = sent_tokenize(text)
-    sentece_list = {'sentences':sentence_tokens}
-    return sentece_list
+    sentence_list = {'sentences':sentence_tokens}
+    return sentence_list
 
 def word_pos_tag(text):
     tokens = nltk.word_tokenize(text)

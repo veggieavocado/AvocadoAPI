@@ -39,7 +39,7 @@ class WordAPITestCase(TestCase):
             'username': self.username,
             'password': self.password,
         }
-        # create sentece data
+        # create sentence data
         self.word = {
                     'owner':'VA',
                     'username':'',

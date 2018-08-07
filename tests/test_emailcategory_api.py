@@ -56,7 +56,7 @@ class TextAPITestCase(TestCase):
                     In just its third year, Hitch served 30 million trips in this past holiday season, the longest of which was further than 1,500 miles.\
                     That\'s about the distance from Miami to Boston. This enormous need of migrant workers has powered fast upgrade and\
                     innovation across the country\'s transport systems."
-        # create sentece data
+        # create sentence data
         self.text1 = {
                     'owner':'USER',
                     'username':'lee',

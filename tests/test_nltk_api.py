@@ -61,7 +61,7 @@ class TextAPITestCase(TestCase):
                     The nation’s tax income this year is estimated at 365 trillion won ($323.6 billion), up 5.5 percent from the previous year, according to data compiled by the Ministry of Economy and Finance and Ministry of Interior and Safety.\
                     Of the estimated total, national taxes will account for 287.1 trillion won, up 19 trillion won from the initial target amount, the Finance Ministry said. \
                     The Interior Ministry, in charge of local affairs and taxes, suggested that local taxes will total at 77.9 trillion won."
-        # create sentece data
+        # create sentence data
         self.text1 = {
                     'owner':'USER',
                     'username':'lee',

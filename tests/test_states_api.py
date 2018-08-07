@@ -39,7 +39,7 @@ class StateAPITestCase(TestCase):
             'username': self.username,
             'password': self.password,
         }
-        # create sentece data
+        # create sentence data
         self.state = {
                       'type':"TEXT",
                       'status':0

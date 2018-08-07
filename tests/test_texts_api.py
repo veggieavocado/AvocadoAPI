@@ -46,7 +46,7 @@ class TextAPITestCase(TestCase):
                          got a call in the middle of the night asking: “We have an unexpected baby boy; do you want him?” They said: “Of course.”\
                          My biological mother later found out that my mother had never graduated from college and that my father had never graduated from high school.\
                          She refused to sign the final adoption papers. She only relented a few months later when my parents promised that I would someday go to college."
-        # create sentece data
+        # create sentence data
         self.text = {
                         'owner':'USER',
                         'username':'lee',
