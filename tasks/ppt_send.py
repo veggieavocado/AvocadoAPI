@@ -10,7 +10,7 @@ import os, sys, glob
 
 start_path = os.getcwd()
 proj_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "arbiter.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "avocado.settings")
 sys.path.append(proj_path)
 os.chdir(proj_path)
 

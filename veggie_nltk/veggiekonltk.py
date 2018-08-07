@@ -1,24 +1,91 @@
+from contents.models import WantedContent
 from konlpy.tag import Okt, Hannanum
-from nltk import pos_tag, Freq
+from nltk import pos_tag, FreqDist
 from nltk.corpus import stopwords
 from collections import Counter
 twitter = Okt()
 hannanum = Hannanum()
 
 
-korean_sentence = "리듬엔'은 고객사의 브랜드를 이해하고 브랜드의 가치를 온라인에 담애는 글로벌 브랜드 파트너입니다. 리듬엔은 크리에이티브로 뭉친 사람들이 모여있는 곳으로 감각있고 창의적인 전문가들이 브랜드 플랫폼 서비스를 개발합니다.\n\n\n주요업무\n• HTML·퍼블리싱·UI개발\n• UI·UX, 자바스크립트\n\n자격요건\n• 성별무관\n• 만 23세 이상 33세 이하\n• 초대졸이상\n• 크로스브라우징/웹표준 준수 가능자\n• 웹 접근성/반응형 가능자\n• Javascript/Jauery 가능자\n• Mobile/App 가능자\n\n우대사항\n• 경력 1년 이상\n• 컴퓨터 관련 전공\n• 워드프레스/부트스트랩 가능\n• 고도몰/카페24가능자\n• 모바일앱 UI가이드 제작 경험자\n• 에이전시 경력자\n\n혜택 및 복지\n• 장기근속자 포상제\n• 이 달의 우수사원 포상\n• 킹갓제너럴능력자 재택근무 가능\n• 통신비 지원\n• 맥북 지원\n• 점심, 간식비 제공\n• 프로젝트 완료 후 리프레쉬 휴가 (휴가비 지원)\n• 불금 조기퇴근\n• 피곤한 월요일 1시간 늦게 출근\n\n• 연금·보험 국민연금, 고용보험, 산재보험, 건강보험\n• 휴무·휴가·행사 주5일근무, 연차, 월차, Refresh휴가, 워크샵/MT\n• 보상·수당·지원 스톡옵션, 각종 경조금 지원, 인센티브제, 자기계발비 지원, \n• 도서구입비 지원, 휴가비 지원"
+import requests
 
-tokens = hannanum.morphs(korean_sentence)
+i = 1
+content_list = []
+while r.json()['next'] is not None:
+    r = requests.get('http://45.77.179.168:3000/api/v1/contents/job_contents/?page={}'.format(i))
+    content_data = r.json()['results']
+    for j in range(len(content_data)):
+        content = content_data[j]['content']
+        content_list.append(content)
+    i += 1
+
+len(content_list)
+
+def korean_text_pre(sentence):
+    tokens = hannanum.morphs(korean_sentence)
+    stop_words = set(stopwords.words('english'))
+    stop_words.add(',')
+    stop_words.add('.')
+    filtered_sentence = [w for w in tokens if not w.lower() in stop_words]
+    filtered_sentence = [word for word in filtered_sentence if len(word) > 1]
+    filtered_sentence = [word for word in filtered_sentence if not word.isnumeric()]
+    count_list = Counter(filtered_sentence)
+    return count_list
+
+def alpha_list(sentence):
+    pos = twitter.pos(sentence, norm=True, stem=True)
+    pos_alpha = [p[0] for p in pos if p[1] == 'Alpha']
+    return pos_alpha
+
+content_list
+
+tech_list = []
+for content in content_list:
+    temp_list = alpha_list(content)
+    tech_list = tech_list + temp_list
+
+
+tech_list
 stop_words = set(stopwords.words('english'))
 stop_words.add(',')
 stop_words.add('.')
-filtered_sentence = [w for w in tokens if not w.lower() in stop_words]
-filtered_sentence = [word for word in filtered_sentence if len(word) > 1]
-filtered_sentence = [word for word in filtered_sentence if not word.isnumeric()]
-filtered_sentence
+stop_words.add('e')
+stop_words.add('n')
+stop_words.add('s')
+stop_words.add('l')
+stop_words.add('x')
+stop_words.add('q')
+stop_words.add('b')
+filtered_sentence = [w for w in tech_list if not w.lower() in stop_words]
 
-pos = twitter.pos(korean_sentence, norm=True, stem=True)
-pos
-Counter(filtered_sentence)
-Counter(pos)
-print(pos)
+thefile = open('test.txt', 'w')
+for item in filtered_sentence:
+  thefile.write("%s\n" % item)
+
+total_dict = {}
+count_tech = Counter(filtered_sentence)
+for key, value in count_tech.items():
+    if value <= 10:
+        continue
+    total_dict[key] = value
+
+len(total_dict)
+
+import operator
+sorted_x = sorted(total_dict.items(), key=operator.itemgetter(1), reverse=True)
+
+sorted_data = sorted_x[0:30]
+sorted_data[0]
+sorted_data
+
+pass_list = ['js', 'SDK', 'PDF', 'WORD', 'team','experience', 'Spring']
+chart_list = []
+for d in sorted_data:
+    chart_dict = {}
+    if d[0] in pass_list:
+        continue
+    chart_dict['name'] = d[0]
+    chart_dict['y'] = d[1]
+    chart_list.append(chart_dict)
+
+chart_list
