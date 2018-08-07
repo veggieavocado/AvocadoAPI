@@ -16,10 +16,19 @@ while r.json()['next'] is not None:
     content_data = r.json()['results']
     for j in range(len(content_data)):
         content = content_data[j]['content']
+        break
         content_list.append(content)
+    break
     i += 1
 
+r = requests.get('http://45.77.179.168:3000/api/v1/contents/job_contents/?page={}'.format(1))
+content_data = r.json()['results']
+content = content_data[0]['content']
+content
+alpha_list(content)
+
 len(content_list)
+
 
 def korean_text_pre(sentence):
     tokens = hannanum.morphs(korean_sentence)
@@ -74,11 +83,15 @@ len(total_dict)
 import operator
 sorted_x = sorted(total_dict.items(), key=operator.itemgetter(1), reverse=True)
 
-sorted_data = sorted_x[0:30]
-sorted_data[0]
+sorted_data = sorted_x[0:143]
 sorted_data
 
-pass_list = ['js', 'SDK', 'PDF', 'WORD', 'team','experience', 'Spring']
+pass_list = ['js', 'SDK', 'PDF', 'WORD', 'team','experience', 'Spring', 'P', 'REST', 'years',\
+            'management', 'APP', 'SNS', 'Product', 'EC', 'service', 'learning', 'ES', 'Service',\
+            'end', 'PC', 'Experience', 'data', 'K', 'Tech', 'Learning', 'business','Javascript',\
+            'javascript', 'systems', 'Open', 'F', 'product', 'git', 'CS', 'system', 'Computer',\
+            'end', 'End', 'WEB', 'knowledge', 'working', 'W', 'Refresh']
+len(pass_list)
 chart_list = []
 for d in sorted_data:
     chart_dict = {}
@@ -88,4 +101,38 @@ for d in sorted_data:
     chart_dict['y'] = d[1]
     chart_list.append(chart_dict)
 
-chart_list
+
+i = 1
+company_dict = {}
+while r.json()['next'] is not None:
+    r = requests.get('http://45.77.179.168:3000/api/v1/contents/job_contents/?page={}'.format(i))
+    content_data = r.json()['results']
+    for j in range(len(content_data)):
+        company = content_data[j]['company']
+        content = content_data[j]['content']
+        company_dict[company] = list(set(alpha_list(content)))
+    i += 1
+company_dict
+
+chart_dict = {}
+tech_compare_list = []
+for d in sorted_data:
+    if d[0] in pass_list:
+        continue
+    chart_dict[d[0]] = [d[1],[]]
+    tech_compare_list.append(d[0])
+
+len(chart_dict)
+
+company_dict
+
+for k in company_dict.keys():
+    for tech in tech_compare_list:
+        if tech in company_dict[k]:
+            print('True')
+            chart_dict[tech][1].append(k)
+
+tech_compare_list
+len(chart_dict)
+
+chart_dict
