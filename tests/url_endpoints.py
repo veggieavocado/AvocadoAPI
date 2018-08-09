@@ -19,5 +19,7 @@ URL = {
     'mail_categories':'/api/v1/services/mail_categories/',
     'text_freq':'/api/v1/services/text_analysis/freq/',
     'sent_token':'/api/v1/services/text_analysis/sent_token/',
-    'pos_tags':'/api/v1/services/text_analysis/pos_tags/'
+    'pos_tags':'/api/v1/services/text_analysis/pos_tags/',
+    'job_contents': '/api/v1/contents/job_contents/',
+    'wanted_url': '/api/v1/contents/wanted_url/'
 }
