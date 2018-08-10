@@ -19,3 +19,12 @@ class WantedUrl(models.Model):
 
     def __str__(self):
         return "{}".format(self.pk)
+
+
+class WantedData(models.Model):
+    data_name = models.CharField(max_length=20, blank=True, null=True)
+    data = models.TextField()
+    created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return "{}".format(self.data)
