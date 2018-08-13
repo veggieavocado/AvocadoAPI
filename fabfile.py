@@ -23,11 +23,7 @@ import os
 from fabric.api import *
 
 from cryptography.fernet import Fernet
-from avocado.crypt_key import KEY
-
-cipher_suite = Fernet(KEY)
-ciphered_ip = b'gAAAAABbUuztdRPMIpZ9l9Qgh7P-egEEHEHhEcm05nJpAzQi-4rCXDXZGp9rdjFultU8okqISgemKA_Tn6G8pdKlOCZweL40dg=='
-IP_ADDRESS = cipher_suite.decrypt(ciphered_ip).decode()
+from avocado.settings import IP_ADDRESS
 
 local_ip = '127.0.0.1'
 

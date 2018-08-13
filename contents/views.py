@@ -4,8 +4,12 @@ from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 
-from contents.models import WantedContent, WantedUrl
-from contents.serializers import WantedContentSerializer, WantedUrlSerializer
+from contents.models import WantedContent, WantedUrl, WantedData
+from contents.serializers import (
+    WantedContentSerializer,
+    WantedUrlSerializer,
+    WantedDataSerializer,
+)
 
 from utils.paginations import StandardResultPagination
 
@@ -50,4 +54,18 @@ class WantedUrlAPIView(generics.ListCreateAPIView):
 class WantedUrlDetailsAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = WantedUrl.objects.all()
     serializer_class = WantedUrlSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+# WantedUrl view GET POST
+class WantedDataAPIView(generics.ListCreateAPIView):
+    queryset = WantedData.objects.all().order_by('id')
+    serializer_class = WantedDataSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    pagination_class = StandardResultPagination
+    filter_backends = [SearchFilter, OrderingFilter]
+
+# Wantedurl view PUT DELETE
+class WantedDataDetailsAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = WantedData.objects.all()
+    serializer_class = WantedDataSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)

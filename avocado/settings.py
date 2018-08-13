@@ -21,8 +21,11 @@ else:
 KEY = KEY.encode() # 스트링값 바이트로 변경
 cipher_suite = Fernet(KEY)
 
-ciphered_ip = b'gAAAAABbUuztdRPMIpZ9l9Qgh7P-egEEHEHhEcm05nJpAzQi-4rCXDXZGp9rdjFultU8okqISgemKA_Tn6G8pdKlOCZweL40dg=='
+ciphered_ip = b'gAAAAABbcPVHyDNCmqSAjaLPXpxnTerNKSWHqDd1teQPaGnOX_G91WpVTEH-xxce_jzCw9cgsRbGM6RivtE9uHHlzSfDtdZCGw=='
 IP_ADDRESS = cipher_suite.decrypt(ciphered_ip).decode()
+
+ciphered_db = b'gAAAAABbcPVvHqEYN9va0lVAKxbx4di8fY8d3rTpeFh3rgnk1zvlGpmKEIsiIHCktNVD7iFS-x9qVfd49Jz9wqX_GtFH4SlrYA=='
+DB_ADDRESS = cipher_suite.decrypt(ciphered_db).decode()
 
 ALLOWED_HOSTS = ['127.0.0.1', '127.0.1.1', IP_ADDRESS]
 
@@ -108,7 +111,7 @@ elif django_env == 'production':
             'NAME': 'avocado',
             'USER': 'avocado',
             'PASSWORD': 'veggieavocado2018',
-            'HOST': IP_ADDRESS,
+            'HOST': DB_ADDRESS,
             'PORT': 5432,
         }
     }
