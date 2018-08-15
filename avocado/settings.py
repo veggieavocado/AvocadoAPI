@@ -10,6 +10,7 @@ SECRET_KEY = '4w=ni_m52itcdzl6h1zl4+!0de6-4#qt%nl04xvx%x5(a-$slw'
 # 민감한 정보 불러오기: 아이피 주소
 testing = os.environ.get('TRAVIS', 'False') # Travis에서 작동하는지 확인
 django_env = os.environ.get('DJANGO_ENV', 'local') # 도커에서 작동하는지 확인
+# django_env = 'production'
 ###############################
 
 if testing == 'True':

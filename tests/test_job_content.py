@@ -10,7 +10,7 @@ from rest_framework_jwt.settings import api_settings, DEFAULTS
 
 import json, os
 from django.utils.encoding import smart_text
-from contents.models import WantedUrl, WantedContent
+from contents.models import WantedUrl, WantedContent, WantedData
 from accounts.models import Profile
 User = get_user_model()
 
@@ -60,6 +60,21 @@ class WantedContetnsAPITestCase(TestCase):
                                     https://www.wanted.co.kr/wd/12878,",
                             }
 
+        self.wanted_data = {
+                            "data_name": "top_skill",
+                            "data":"[{'name': 'JavaScript', 'y': 539}, {'name': 'AWS', 'y': 503},\
+                                    {'name': 'API', 'y': 461}, {'name': 'iOS', 'y': 333},\
+                                    {'name': 'C', 'y': 333}, {'name': 'Python', 'y': 305},\
+                                    {'name': 'Java', 'y': 264}, {'name': 'Android', 'y': 263},\
+                                    {'name': 'Web', 'y': 257}, {'name': 'React', 'y': 239},\
+                                    {'name': 'Linux', 'y': 200}, {'name': 'UI', 'y': 190},\
+                                    {'name': 'MySQL', 'y': 182}, {'name': 'DB', 'y': 175},\
+                                    {'name': 'CSS', 'y': 169}, {'name': 'HTML', 'y': 168},\
+                                    {'name': 'Git', 'y': 156}, {'name': 'SQL', 'y': 156},\
+                                    {'name': 'MS', 'y': 142}, {'name': 'PHP', 'y': 140},\
+                                    {'name': 'Node', 'y': 125}, {'name': 'R', 'y': 108},\
+                                    {'name': 'Ruby', 'y': 105}]"
+                            }
 
         response = self.client.post(
             URL['user_create_url'],
@@ -146,3 +161,33 @@ class WantedContetnsAPITestCase(TestCase):
         data_split = data['urls'].split(',')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data_split[0], "https://www.wanted.co.kr/wd/12970")
+
+    def test_wanted_data_api(self):
+        # post
+        # unauthorized case
+        response = self.client.post(
+            URL['wanted_data'],
+            self.wanted_data,
+            format='json',
+        )
+        self.assertEqual(WantedData.objects.all().count(), 0, msg='user data not created properly')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        # authorized case
+        response = self.client.post(
+            URL['wanted_data'],
+            self.wanted_data,
+            HTTP_AUTHORIZATION='JWT ' + self.token,
+            format='json',
+        )
+        self.assertEqual(WantedData.objects.all().count(), 1, msg='user data not created properly')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # authorized case
+        response = self.client.get(
+            URL['wanted_data'],
+            HTTP_AUTHORIZATION='JWT ' + self.token,
+            format='json',
+        )
+        data = response.json()['results'][0]
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(data['data_name'], "top_skill")
