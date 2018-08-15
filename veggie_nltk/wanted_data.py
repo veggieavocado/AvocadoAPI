@@ -2,47 +2,15 @@ from konlpy.tag import Okt, Hannanum
 from nltk import pos_tag, FreqDist
 from nltk.corpus import stopwords
 from collections import Counter
+from time import time
 twitter = Okt()
 hannanum = Hannanum()
 
 import requests
 import operator
 
-
-WANTED_PASS_LIST = ['sdk', 'pdf', 'word', 'team','experience', 'p', 'years', 'code', 'tool', 'imac',\
-                   'management', 'app', 'sns', 'product', 'ec', 'service', 'learning', 'es',\
-                   'end', 'pc', 'data', 'k', 'tech', 'business',  'systems', 'Open', 'f', 'cs', \
-                   'system', 'Computer', 'knowledge', 'working', 'w', 'refresh', 'e', 'n', 's', \
-                   'l', 'x', 'q', 'b', 'development', 'wework', 'commerce', 'one', 'boot', 'language',\
-                   'code', 'new', 'studyplus', 'solution', 'network', 'level', 'day', 'google',\
-                   'windows', 'high', 'quality', 'work', 'technology', 'quality', 'develop', 'cto',\
-                   'pubg', 'user', 'culture', 'communication', 'source', 'global', 'computer',\
-                   'science', 'based', 'kt', 'engineer', 'studio', 'cd', 'life', 'tools', 'smart', 'etc',\
-                   'vc', 'support', 'pro', 'script', 'pro', 'project', 'bespin', 'boot', 'company',
-                   'programming', 'services', 'skills', 'top', 'vision', 'engineering']
-
-CHANGE_NAME_DICT = {
-    'machine': 'Machine Learning',
-    'deep': 'Deep Learning',
-    'ios': 'iOS',
-    'restful': 'RESTful',
-    'react': 'React.js',
-    'node': 'Node.js',
-    'angular': 'Angular.js',
-    'vue': 'Vue.js',
-    'jquery': 'jQuery',
-    'objective': 'Objective C',
-    'open': 'Open Source',
-    'stack': 'full stack',
-    'analytics': 'Google Analytics',
-    'mysql': 'MySQL',
-    'nosql': 'NoSQL',
-}
-
-CAPITAL_NAMES = ['aws', 'api', 'c', 'java', 'ui', 'us', 'css', 'html', 'db', 'sql', 'php',\
-                'ms', 'r', 'qa', 'ai', 'ci', 'rdbms', 'os', 'sw', 'onda', 'iot', \
-                'rds', 'mvp', 'http', 'tdd', 'pm', 'gcp', 'spa', 'kpi', 'basic',\
-                'mvc', 'eoc', 'dbms']
+# 외부에서 예외 처리 변수를 불러오기
+from veggie_nltk.exception_list import CAPITAL_NAMES, CHANGE_NAME_DICT, EXCEPTION_LIST, WANTED_PASS_LIST
 
 class WantedProcessor(object):
 
@@ -51,6 +19,7 @@ class WantedProcessor(object):
         self.stop_words.add(',')
         self.stop_words.add('.')
         self.wanted_contents_url = 'http://202.182.112.117:3000/api/v1/contents/job_contents/?page={}'
+        print("Wanted Processor ready!")
 
     # 순수 함수
     # Text에서 영어만 추출하는 함수이다. Wanted 채용 공고란 에서 기술 리스트는 대부분 영어로 되어 있기 때문이다.
@@ -62,55 +31,69 @@ class WantedProcessor(object):
     # request wanted api
     # 수집한 채용 데이터를 저장한 api에 요청으로 보내서 데이터를 저장하는 함수
     def wanted_request(self):
+        start_time = time()
         i = 1
-        content_list = []
+        tech_list = []
         company_dict = {}
+        url_dict = {}
         r = requests.get(self.wanted_contents_url.format(1))
         while r.json()['next'] is not None:
             r = requests.get(self.wanted_contents_url.format(i))
             content_data = r.json()['results']
             for j in range(len(content_data)):
                 content = content_data[j]['content']
-                content_list.append(content)
                 company = content_data[j]['company']
                 content = content_data[j]['content']
+                url = content_data[j]['url']
+                if company in url_dict.keys():
+                    url_dict[company].append(url)
+                else:
+                    url_dict[company] = [url]
                 company_dict[company] = list(set(self.alpha_list(content)))
+                temp_list = self.alpha_list(content)
+                tech_list = tech_list + temp_list
             i += 1
-        self.content_list = content_list
-        self.comapny_dict = company_dict
-        return content_list, company_dict
+        comapny_dict = company_dict
+        tech_list = tech_list
+        url_dict = url_dict
+        end_time = time()
+        print(end_time - start_time)
+        return company_dict, tech_list, url_dict
 
-    # 미완성 refactoring 함수
-    def exception_process(self, data, sorted_list, exception_dict, exception_parent, exception_child):
-        if exception_parent in sorted_list:
-            if data[0] == exception_child:
-                exception_dict[exception_child] = data[1]
-                return 'continue'
-            if data[0] == exception_parent:
-                result_tuple = (exception_parent, data[1] + exception_dict[exception_child])
-                refine_skill.append(result_tuple)
-                return 'continue'
+    # 예외 처리 함수 : 중복되지만 key 값이 다른 함수 합치기
+    def exception_process(self, data, parent_key, child_key, func):
+        if parent_key and child_key in data.keys():
+            if func == 'sum':
+                data[parent_key] = data[parent_key] + data[child_key]
+                del data[child_key]
+            elif func == 'sub':
+                data[parent_key] = data[parent_key] - data[child_key]
+                del data[child_key]
+        else:
+            pass
+        return data
 
-    # 많이 사용되는 기술 list와 기술별 사용회사 리스트를 뽑는 것을 수행하는 함수
-    def create_tech_list(self, content_list, company_dict):
-        tech_list = []
-        for content in content_list:
-            temp_list = self.alpha_list(content)
-            tech_list = tech_list + temp_list
-
+    # Wanted Data 전처리
+    def refine_data(self, tech_list ):
         filtered_sentence = [w for w in tech_list if not w.lower() in self.stop_words]
         total_dict = {}
         count_tech = Counter(filtered_sentence)
+
+        # 빈도수가 10개 이하인 값 버리기
         for key, value in count_tech.items():
             if value <= 10:
                 continue
             total_dict[key] = value
+
+        # 중복되지만 key 값이 다른 데이터 합치기
+        for exception in EXCEPTION_LIST:
+            total_dict = self.exception_process(total_dict, exception[0], exception[1], 'sum')
+        total_dict = self.exception_process(total_dict, 'web', 'amazon', 'sub')
+
         sorted_x = sorted(total_dict.items(), key=operator.itemgetter(1), reverse=True)
         # data tyep is like [('aws', 514), ('api', 470),  ('web', 350), ('ios', 349),  ('c', 344), ('js', 328), ('python', 324),]
         # extract top 200
         sorted_data = sorted_x[0:200]
-
-        final_confirm_list = [data[0] for data in sorted_data]
         js1 = js2 = amazon = web = rest = react = node = angular = vue = front = back = 0
         refine_skill = []
         exception_dict = {}
@@ -118,90 +101,27 @@ class WantedProcessor(object):
             temp_dict = {}
             if d[0] in WANTED_PASS_LIST:
                 continue
-            if 'javascript' in final_confirm_list:
-                if d[0] == 'js':
-                    js1 = d[1]
-                    continue
-                if d[0] == 'javascript':
-                    jstuple = ('javascript', d[1] + js1)
-                    refine_skill.append(jstuple)
-                    continue
-            if 'amazon' in final_confirm_list:
-                if d[0] == 'web':
-                    web = d[1]
-                    continue
-                if d[0] == 'amazon':
-                    webtuple = ('web', web - d[1])
-                    refine_skill.append(webtuple)
-                    continue
-            if 'rest' in final_confirm_list:
-                if d[0] == 'restful':
-                    rest = d[1]
-                    continue
-                if d[0] == 'rest':
-                    rest_tuple = ('restful', rest + d[1])
-                    refine_skill.append(rest_tuple)
-                    continue
-            if 'reactjs' in final_confirm_list:
-                if d[0] == 'react':
-                    react = d[1]
-                    continue
-                if d[0] == 'reactjs':
-                    react_tuple = ('react', react + d[1])
-                    refine_skill.append(react_tuple)
-                    continue
-            if 'nodejs' in final_confirm_list:
-                if d[0] == 'node':
-                    node = d[1]
-                    continue
-                if d[0] == 'nodejs':
-                    node_tuple = ('Node.js', node + d[1])
-                    refine_skill.append(node_tuple)
-                    continue
-            if 'angularjs' in final_confirm_list:
-                if d[0] == 'angular':
-                    angular = d[1]
-                    continue
-                if d[0] == 'angularjs':
-                    angular_tuple = ('angular', angular + d[1])
-                    refine_skill.append(angular_tuple)
-                    continue
-            if 'vuejs' in final_confirm_list:
-                if d[0] == 'vue':
-                    vue = d[1]
-                    continue
-                if d[0] == 'vuejs':
-                    vue_tuple = ('vue', vue + d[1])
-                    refine_skill.append(vue_tuple)
-                    continue
-            if 'frontend' in final_confirm_list:
-                if d[0] == 'front':
-                    front = d[1]
-                    continue
-                if d[0] == 'frontend':
-                    front_tuple = ('frontend', front + d[1])
-                    refine_skill.append(front_tuple)
-                    continue
-            if 'backend' in final_confirm_list:
-                if d[0] == 'back':
-                    back = d[1]
-                    continue
-                if d[0] == 'backend':
-                    back_tuple = ('backend', back + d[1])
-                    refine_skill.append(back_tuple)
-                    continue
             temp_tuple = (d[0], d[1])
             refine_skill.append(temp_tuple)
-
         final_sorted_list = sorted(refine_skill, key=lambda tup: tup[1], reverse=True)
-        final_sorted_list
+        return final_sorted_list
+
+    # 많이 사용되는 기술 list와 기술별 사용회사 리스트를 뽑는 것을 수행하는 함수
+    def create_topskill_list(self, final_sorted_list, tech_list):
         top_skill = []
         for d in final_sorted_list:
             chart_dict = {}
-            chart_dict['name'] = d[0]
+            if d[0] in CHANGE_NAME_DICT.keys():
+                chart_dict['name'] = CHANGE_NAME_DICT[d[0]]
+            elif d[0] in CAPITAL_NAMES:
+                chart_dict['name'] = d[0].upper()
+            else:
+                chart_dict['name'] = d[0].title()
             chart_dict['y'] = d[1]
             top_skill.append(chart_dict)
+        return top_skill
 
+    def create_wantedjob_list(self, final_sorted_list, company_dict):
         wanted_job = {}
         tech_compare_list = []
         for d in final_sorted_list:
@@ -215,10 +135,31 @@ class WantedProcessor(object):
             for tech in tech_compare_list:
                 if tech in company_dict[k]:
                     wanted_job[tech][1].append(k)
+        result_dict = {}
 
-        return top_skill, wanted_job
-
+        total_list = list(CHANGE_NAME_DICT.keys()) + CAPITAL_NAMES
+        # pop 이되면 데이터가 순서상 마지막으로 추가 되어서 문제가 발생하여
+        # 반복문을 두개로 쪼개서 실행
+        for key, v in wanted_job.items():
+            if key not in total_list:
+                wanted_job[key.title()] = wanted_job.pop(key)
+        for key, v in wanted_job.items():
+            if key in CHANGE_NAME_DICT.keys():
+                wanted_job[CHANGE_NAME_DICT[key]] = wanted_job.pop(key)
+            elif key in CAPITAL_NAMES:
+                wanted_job[key.upper()] = wanted_job.pop(key)
+        # pop으로 dict의 key 값을 변환해주어서 다시 순서를 sort해줘야함
+        sorted_tuple = sorted(wanted_job.items(), key=operator.itemgetter(1), reverse=True)
+        # sort 된값은 tuple로 저장되므로 다시 dict 형태로 바꾸어야 한다.
+        for data in sorted_tuple:
+            result_dict[data[0]] = data[1]
+        return result_dict
 
 w = WantedProcessor()
-content_list, company_dict = w.wanted_request()
-top_skill, wanted_job = w.create_tech_list(content_list, company_dict)
+company_dict, tech_list, url_dict = w.wanted_request()
+url_dict
+refine_data = w.refine_data(tech_list)
+top_skill = w.create_topskill_list(refine_data, tech_list)
+top_skill
+wanted_job = w.create_wantedjob_list(refine_data, company_dict)
+wanted_job
