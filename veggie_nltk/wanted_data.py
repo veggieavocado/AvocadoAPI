@@ -154,12 +154,3 @@ class WantedProcessor(object):
         for data in sorted_tuple:
             result_dict[data[0]] = data[1]
         return result_dict
-
-w = WantedProcessor()
-company_dict, tech_list, url_dict = w.wanted_request()
-url_dict
-refine_data = w.refine_data(tech_list)
-top_skill = w.create_topskill_list(refine_data, tech_list)
-top_skill
-wanted_job = w.create_wantedjob_list(refine_data, company_dict)
-wanted_job

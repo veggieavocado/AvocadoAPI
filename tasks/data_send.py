@@ -7,6 +7,7 @@ description : ppt 데이터 데이터 베이스로 전송
 
 import pandas as pd
 import os, sys, glob
+import json
 
 
 start_path = os.getcwd()
@@ -19,7 +20,8 @@ from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
 
 from services.models import Sentence
-from contents.models import WantedUrl
+from contents.models import WantedUrl, WantedData
+from veggie_nltk.wanted_data import WantedProcessor
 
 data_list = os.listdir('./data')
 print(os.getcwd())
@@ -58,3 +60,19 @@ def wanted_url_send(url):
     url_orm = WantedUrl(urls=str_url)
     url_orm.save()
     print('DB Send Success')
+
+def wanted_data_send():
+    w = WantedProcessor()
+    company_dict, tech_list, url_dict = w.wanted_request()
+    refine_data = w.refine_data(tech_list)
+    top_skill = w.create_topskill_list(refine_data, tech_list)
+    wanted_job = w.create_wantedjob_list(refine_data, company_dict)
+    str_topskill = json.dumps(top_skill)
+    str_url_dict = json.dumps(url_dict)
+    str_wanted_job = json.dumps(wanted_job)
+    url_dict_orm = WantedData(data_name='hire_url', data = str_url_dict)
+    url_dict_orm.save()
+    url_dict_orm = WantedData(data_name='top_skill', data = str_topskill)
+    url_dict_orm.save()
+    url_dict_orm = WantedData(data_name='wanted_job', data = str_wanted_job)
+    url_dict_orm.save()
