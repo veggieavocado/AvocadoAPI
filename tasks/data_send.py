@@ -19,7 +19,6 @@ from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
 
 from services.models import Sentence
-from contents.models import WantedUrl
 
 data_list = os.listdir('./data')
 print(os.getcwd())
@@ -52,9 +51,3 @@ def data_import():
                                     translated=translated)
             sentence_list.append(sentence_obj)
     Sentence.objects.bulk_create(sentence_list)
-
-def wanted_url_send(url):
-    str_url = url.replace(" ", "")
-    url_orm = WantedUrl(urls=str_url)
-    url_orm.save()
-    print('DB Send Success')
