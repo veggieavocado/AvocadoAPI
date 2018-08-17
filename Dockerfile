@@ -15,7 +15,6 @@ ENV DOCKER_CONTAINER=True
 WORKDIR /app
 RUN python3 manage.py makemigrations
 RUN python3 manage.py makemigrations accounts
-RUN python3 manage.py makemigrations contents
 RUN python3 manage.py makemigrations services
 RUN python3 manage.py migrate auth
 RUN python3 manage.py migrate
