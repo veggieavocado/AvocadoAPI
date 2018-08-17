@@ -19,8 +19,7 @@ from services.serializers import (
     StateSerializer,
     StructureSerializer,
     )
-
-from veggie_nltk.veggienltk import text_freq, sentence_tokenize, word_pos_tag
+    
 from utils.paginations import StandardResultPagination
 
 
@@ -252,43 +251,4 @@ class EmailCategoriesAPIView(APIView):
         result = {
             '카테고리': queryset
         }
-        return Response(result, status=200)
-
-
-class TextFreqAPIView(APIView):
-    # serializer_class = TextSerializer
-    permission_classes = (permissions.AllowAny,)
-
-    def post(self, request, *args, **kwargs):
-        data = request.data
-        text_id = data['text_id']
-        text = Text.objects.get(pk=text_id).template
-        result = text_freq(text)
-
-        return Response(result, status=200)
-
-
-class SentTokenAPIView(APIView):
-    # serializer_class = TextSerializer
-    permission_classes = (permissions.AllowAny,)
-
-    def post(self, request, *args, **kwargs):
-        data = request.data
-        text_id = data['text_id']
-        text = Text.objects.get(pk=text_id).template
-        result = sentence_tokenize(text)
-
-        return Response(result, status=200)
-
-
-class PosTagsAPIView(APIView):
-    # serializer_class = TextSerializer
-    permission_classes = (permissions.AllowAny,)
-
-    def post(self, request, *args, **kwargs):
-        data = request.data
-        text_id = data['text_id']
-        text = Text.objects.get(pk=text_id).template
-        result = word_pos_tag(text)
-
         return Response(result, status=200)
