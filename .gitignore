@@ -8,5 +8,6 @@ db.sqlite3
 api_env/
 data/
 crypt_key.py
+veggieavocado_keypair.pem
 deeplearning_test/
 .ipynb_checkpoints/
